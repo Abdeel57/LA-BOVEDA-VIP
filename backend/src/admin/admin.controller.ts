@@ -548,6 +548,25 @@ export class AdminController {
     }
   }
 
+  // Limpiar caché de settings
+  @Roles('admin', 'superadmin')
+  @Post('cache/clear-settings')
+  async clearSettingsCache() {
+    try {
+      await this.adminService.clearSettingsCache();
+      return {
+        success: true,
+        message: 'Caché de settings limpiado correctamente'
+      };
+    } catch (error: any) {
+      console.error('❌ Error clearing settings cache:', error);
+      throw new HttpException(
+        error.message || 'Error al limpiar caché de settings',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
   // --- Bulk Import Endpoints ---
 
   @Roles('admin', 'superadmin')

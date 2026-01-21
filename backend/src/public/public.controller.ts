@@ -61,12 +61,12 @@ export class PublicController {
       return settings;
     } catch (error) {
       console.error('❌ Public controller: Error getting settings:', error);
-      // Fallback response if anything fails
+      // Fallback response if anything fails (plantilla limpia)
       return {
         id: 'main_settings',
-        siteName: 'Lucky Snap',
+        siteName: 'LA BOVEDA VIP',
         appearance: {
-          siteName: 'Lucky Snap',
+          siteName: 'LA BOVEDA VIP',
           logoAnimation: 'rotate',
           colors: {
             backgroundPrimary: '#111827',
@@ -94,10 +94,10 @@ export class PublicController {
 
   @Get('settings-simple')
   getSettingsSimple() {
-    // Return hardcoded settings to test if the issue is with database
+    // Return hardcoded settings to test if the issue is with database (plantilla limpia)
     return {
       id: 'main_settings',
-      siteName: 'Lucky Snap',
+      siteName: 'LA BOVEDA VIP',
       paymentAccounts: [],
       faqs: [],
       createdAt: new Date(),
@@ -125,10 +125,10 @@ export class PublicController {
 
   @Get('config')
   getConfig() {
-    // Alternative endpoint for settings
+    // Alternative endpoint for settings (plantilla limpia)
     return {
       id: 'main_settings',
-      siteName: 'Lucky Snap',
+      siteName: 'LA BOVEDA VIP',
       paymentAccounts: [],
       faqs: [],
       createdAt: new Date().toISOString(),
@@ -138,12 +138,12 @@ export class PublicController {
 
   @Get('working')
   getWorkingSettings() {
-    // This endpoint will definitely work
+    // This endpoint will definitely work (plantilla limpia)
     return {
       success: true,
       data: {
         id: 'main_settings',
-        siteName: 'Lucky Snap',
+        siteName: 'LA BOVEDA VIP',
         paymentAccounts: [],
         faqs: [],
         createdAt: new Date().toISOString(),

@@ -1775,6 +1775,11 @@ export class AdminService {
     }
   }
 
+  async clearSettingsCache(): Promise<void> {
+    await this.cacheService.invalidateSettings();
+    this.logger.log('✅ Cache de settings limpiado manualmente');
+  }
+
   private formatSettingsResponse(settings: any) {
     return {
       id: settings.id,

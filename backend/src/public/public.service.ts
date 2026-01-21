@@ -291,7 +291,7 @@ export class PublicService {
         const newSettings = await this.prisma.settings.create({
           data: {
             id: 'main_settings',
-            siteName: 'Lucky Snap',
+            siteName: 'LA BOVEDA VIP',
             logoAnimation: 'rotate',
             primaryColor: '#111827',
             secondaryColor: '#1f2937',
@@ -317,12 +317,12 @@ export class PublicService {
       return this.formatSettingsResponse(settings);
     } catch (error) {
       console.error('❌ Error getting settings:', error);
-      // Return default settings if there's an error
+      // Return default settings if there's an error (plantilla limpia)
       return {
         id: 'main_settings',
-        siteName: 'Lucky Snap',
+        siteName: 'LA BOVEDA VIP',
         appearance: {
-          siteName: 'Lucky Snap',
+          siteName: 'LA BOVEDA VIP',
           logoAnimation: 'rotate',
           colors: {
             backgroundPrimary: '#111827',

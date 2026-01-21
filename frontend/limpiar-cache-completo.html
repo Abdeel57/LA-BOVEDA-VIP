@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpiar Caché Completo - LA BOVEDA VIP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        button {
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0284c7;
+        }
+        .success {
+            color: #10b981;
+            margin: 10px 0;
+        }
+        .error {
+            color: #ef4444;
+            margin: 10px 0;
+        }
+        .info {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        pre {
+            background: #111827;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Limpiar Caché Completo</h1>
+        <p>Esta herramienta limpiará TODO el caché y forzará que el sitio use el backend correcto.</p>
+
+        <div class="info">
+            <h3>📋 Pasos a seguir:</h3>
+            <ol>
+                <li>Click en "Limpiar Todo el Caché"</li>
+                <li>Click en "Verificar Backend"</li>
+                <li>Si todo está bien, click en "Ir al Sitio"</li>
+            </ol>
+        </div>
+
+        <button onclick="limpiarTodo()">🧹 Limpiar Todo el Caché</button>
+        <button onclick="verificarBackend()">🔍 Verificar Backend</button>
+        <button onclick="irAlSitio()">🚀 Ir al Sitio</button>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        const BACKEND_URL = 'https://la-boveda-vip-production.up.railway.app/api';
+
+        function limpiarTodo() {
+            const resultado = document.getElementById('resultado');
+            resultado.innerHTML = '<p>🧹 Limpiando...</p>';
+
+            try {
+                // Limpiar localStorage
+                localStorage.clear();
+                console.log('✅ localStorage limpiado');
+
+                // Limpiar sessionStorage
+                sessionStorage.clear();
+                console.log('✅ sessionStorage limpiado');
+
+                // Limpiar caché del navegador (si es posible)
+                if ('caches' in window) {
+                    caches.keys().then(names => {
+                        names.forEach(name => {
+                            caches.delete(name);
+                        });
+                        console.log('✅ Caché del navegador limpiado');
+                    });
+                }
+
+                resultado.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Caché Limpiado</h3>
+                        <p>Se limpió:</p>
+                        <ul>
+                            <li>localStorage</li>
+                            <li>sessionStorage</li>
+                            <li>Caché del navegador</li>
+                        </ul>
+                        <p><strong>Ahora verifica el backend y luego ve al sitio.</strong></p>
+                    </div>
+                `;
+            } catch (error) {
+                resultado.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function verificarBackend() {
+            const resultado = document.getElementById('resultado');
+            resultado.innerHTML = '<p>🔍 Verificando backend...</p>';
+
+            try {
+                // Verificar health
+                const healthResponse = await fetch(`${BACKEND_URL}/health`);
+                const health = await healthResponse.json();
+
+                // Verificar settings
+                const settingsResponse = await fetch(`${BACKEND_URL}/public/settings`);
+                const settings = await settingsResponse.json();
+
+                if (settings.siteName === 'LA BOVEDA VIP') {
+                    resultado.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Backend Funcionando Correctamente</h3>
+                            <p><strong>Site Name:</strong> ${settings.siteName}</p>
+                            <p><strong>Backend URL:</strong> ${BACKEND_URL}</p>
+                            <p><strong>Health Status:</strong> ${health.status}</p>
+                            <p><strong>✅ Todo está configurado correctamente!</strong></p>
+                            <p>Ahora puedes ir al sitio y debería mostrar "LA BOVEDA VIP"</p>
+                        </div>
+                    `;
+                } else {
+                    resultado.innerHTML = `
+                        <div class="error">
+                            <h3>⚠️ Backend tiene datos incorrectos</h3>
+                            <p><strong>Site Name actual:</strong> ${settings.siteName}</p>
+                            <p>El backend está devolviendo datos incorrectos. Necesitas reiniciar el backend en Railway.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultado.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Error conectando al backend</h3>
+                        <p>${error.message}</p>
+                        <p><strong>Posibles causas:</strong></p>
+                        <ul>
+                            <li>El backend no está funcionando</li>
+                            <li>Problemas de CORS</li>
+                            <li>URL incorrecta</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        function irAlSitio() {
+            // Obtener la URL del sitio actual
+            const sitioUrl = window.location.origin;
+            window.location.href = sitioUrl;
+        }
+
+        // Verificar automáticamente al cargar
+        window.addEventListener('load', () => {
+            console.log('🔍 Herramienta de limpieza de caché cargada');
+            console.log('Backend URL:', BACKEND_URL);
+        });
+    </script>
+</body>
+</html>
+

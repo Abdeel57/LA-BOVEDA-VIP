@@ -40,23 +40,21 @@ async function bootstrap() {
   app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
   // Enable CORS with specific configuration
-  // ⚠️ IMPORTANTE: Para agregar un nuevo cliente, agrega sus dominios aquí
-  // Formato: 'https://dominio.com' y 'https://www.dominio.com'
-  const allowedOrigins = [
+  // ⚠️ IMPORTANTE: Puedes configurar dominios desde CORS_ORIGINS en variables de entorno
+  // Formato: CORS_ORIGINS=https://dominio1.com,https://dominio2.com
+  
+  // Dominios por defecto (siempre permitidos)
+  const defaultOrigins = [
     /^http:\/\/localhost:5173$/, // Vite dev server (desarrollo local)
+    /^http:\/\/localhost:3001$/, // Puerto alternativo desarrollo
     /\.onrender\.com$/, // Any Render subdomain
     /\.netlify\.app$/, // Any Netlify subdomain
+    /\.up\.railway\.app$/, // Any Railway subdomain (ej: la-boveda-vip-production.up.railway.app)
     /dashboard\.render\.com$/, // Render dashboard
     
     // ============================================
     // DOMINIOS DE CLIENTES - Agrega aquí los nuevos
     // ============================================
-    // Ejemplo de cómo agregar un nuevo cliente:
-    // 'https://cliente-nuevo.com',
-    // 'https://www.cliente-nuevo.com',
-    // 'http://cliente-nuevo.com', // Solo si necesitas HTTP en desarrollo
-    // 'http://www.cliente-nuevo.com',
-    
     // Cliente: Sorteos Gama
     'https://sorteosgama.pro',
     'https://www.sorteosgama.pro',
@@ -69,6 +67,21 @@ async function bootstrap() {
     'https://luckysnap.netlify.app',
     'https://neodemo.netlify.app',
   ];
+
+  // Obtener dominios adicionales desde variables de entorno
+  const corsOriginsEnv = process.env.CORS_ORIGINS;
+  const envOrigins: (string | RegExp)[] = [];
+  
+  if (corsOriginsEnv) {
+    const origins = corsOriginsEnv.split(',').map(origin => origin.trim()).filter(Boolean);
+    envOrigins.push(...origins);
+    console.log(`🌐 CORS Origins desde variables de entorno: ${origins.join(', ')}`);
+  }
+
+  // Combinar dominios por defecto con los de variables de entorno
+  const allowedOrigins = [...defaultOrigins, ...envOrigins];
+
+  console.log(`🔒 CORS configurado con ${allowedOrigins.length} orígenes permitidos`);
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -84,10 +97,12 @@ async function bootstrap() {
       });
 
       if (isAllowed) {
+        console.log(`✅ CORS permitido para: ${origin}`);
         return callback(null, origin);
       }
 
-      console.warn(`CORS bloqueado para origen no permitido: ${origin}`);
+      console.warn(`❌ CORS bloqueado para origen no permitido: ${origin}`);
+      console.warn(`   Orígenes permitidos: ${allowedOrigins.map(o => o instanceof RegExp ? o.toString() : o).join(', ')}`);
       return callback(new Error(`CORS origin not allowed: ${origin}`));
     },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
