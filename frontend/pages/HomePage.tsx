@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PageAnimator from '../components/PageAnimator';
 import RaffleCard from '../components/RaffleCard';
 import Spinner from '../components/Spinner';
@@ -11,6 +11,7 @@ import { Trophy, Gift, Zap, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useOptimizedAnimations } from '../utils/deviceDetection';
 import { useHomeData } from '../hooks/useHomeData';
+import { Raffle } from '../types';
 
 const HomePage = () => {
     const { raffles, winners, loading, mainRaffle, otherRaffles } = useHomeData();
@@ -23,6 +24,57 @@ const HomePage = () => {
     
     // Usar colores pre-calculados (optimización de rendimiento)
     // Ya no necesitamos calcular getTextColor en cada render
+    const debugMainRaffle = useMemo<Raffle | null>(() => {
+        if (!import.meta.env.DEV || mainRaffle) return null;
+        const in7Days = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        return {
+            id: 'debug-main-raffle',
+            title: 'Sorteo de Prueba',
+            slug: 'sorteo-prueba',
+            description: 'Muestra local para revisar el diseño.',
+            imageUrl: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=1600&h=900&fit=crop',
+            price: 5,
+            tickets: 1000,
+            sold: 200,
+            drawDate: in7Days,
+            status: 'active',
+        };
+    }, [mainRaffle]);
+
+    const resolvedMainRaffle = mainRaffle ?? debugMainRaffle;
+    useEffect(() => {
+        const heroEl = document.querySelector('[data-hero-section="raffle"]') as HTMLElement | null;
+        const collabEl = document.querySelector('[data-collab-section="true"]') as HTMLElement | null;
+        const heroRect = heroEl ? heroEl.getBoundingClientRect() : null;
+        const collabRect = collabEl ? collabEl.getBoundingClientRect() : null;
+
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                sessionId: 'debug-session',
+                runId: 'home-layout-check',
+                hypothesisId: 'H4',
+                location: 'HomePage.tsx:33',
+                message: 'hero-collab-layout',
+                data: {
+                    loading,
+                    hasMainRaffle: Boolean(resolvedMainRaffle),
+                    usingDebugRaffle: Boolean(debugMainRaffle),
+                    hasHero: Boolean(heroEl),
+                    hasCollab: Boolean(collabEl),
+                    heroBottom: heroRect ? Math.round(heroRect.bottom) : null,
+                    collabTop: collabRect ? Math.round(collabRect.top) : null,
+                    gap: heroRect && collabRect ? Math.round(collabRect.top - heroRect.bottom) : null,
+                    overlaps: heroRect && collabRect ? collabRect.top < heroRect.bottom : null,
+                    viewport: { width: window.innerWidth, height: window.innerHeight },
+                },
+                timestamp: Date.now(),
+            }),
+        }).catch(() => {});
+        // #endregion
+    }, [loading, resolvedMainRaffle, debugMainRaffle]);
 
     return (
         <PageAnimator>
@@ -34,8 +86,8 @@ const HomePage = () => {
                         <p className="text-muted mt-4">Cargando sorteos...</p>
                     </div>
                 </div>
-            ) : mainRaffle ? (
-                <HeroRaffle raffle={mainRaffle} />
+            ) : resolvedMainRaffle ? (
+                <HeroRaffle raffle={resolvedMainRaffle} />
             ) : null}
 
             {/* Other Active Raffles */}

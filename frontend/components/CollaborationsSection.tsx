@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Video } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
@@ -53,6 +53,8 @@ export default function CollaborationsSection({
 }) {
   const reduceAnimations = useOptimizedAnimations();
   const { appearance, preCalculatedTextColors } = useTheme();
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
 
   const primaryColor = appearance?.colors?.action || '#0ea5e9';
   const accentColor = appearance?.colors?.accent || '#ec4899';
@@ -60,9 +62,234 @@ export default function CollaborationsSection({
   const vipGold = '#D4AF37';
   const vipGoldSoft = '#F7E7A1';
 
+  useEffect(() => {
+    const runId = 'collab-title-opacity-pre';
+    const titleEl = titleRef.current;
+    const sectionEl = sectionRef.current;
+    const heroEl = document.querySelector('[data-hero-section="raffle"]') as HTMLElement | null;
+
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: 'debug-session',
+        runId,
+        hypothesisId: 'H1',
+        location: 'CollaborationsSection.tsx:74',
+        message: 'collab-section-theme-values',
+        data: {
+          reduceAnimations,
+          primaryColor,
+          accentColor,
+          backgroundPrimary,
+          titleColorTheme: preCalculatedTextColors?.title,
+          descriptionColorTheme: preCalculatedTextColors?.description,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+
+    if (!titleEl || !sectionEl) {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: 'debug-session',
+          runId,
+          hypothesisId: 'H2',
+          location: 'CollaborationsSection.tsx:95',
+          message: 'missing-refs',
+          data: {
+            hasTitle: Boolean(titleEl),
+            hasSection: Boolean(sectionEl),
+          },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      // #endregion
+      return;
+    }
+
+    const titleStyle = window.getComputedStyle(titleEl);
+    const parentStyle = titleEl.parentElement ? window.getComputedStyle(titleEl.parentElement) : null;
+    const titleRect = titleEl.getBoundingClientRect();
+    const sectionRect = sectionEl.getBoundingClientRect();
+    const heroRect = heroEl ? heroEl.getBoundingClientRect() : null;
+
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: 'debug-session',
+        runId,
+        hypothesisId: 'H1',
+        location: 'CollaborationsSection.tsx:120',
+        message: 'title-computed-style',
+        data: {
+          color: titleStyle.color,
+          opacity: titleStyle.opacity,
+          filter: titleStyle.filter,
+          textShadow: titleStyle.textShadow,
+          parentOpacity: parentStyle?.opacity || null,
+          parentFilter: parentStyle?.filter || null,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: 'debug-session',
+        runId,
+        hypothesisId: 'H4',
+        location: 'CollaborationsSection.tsx:138',
+        message: 'hero-vs-collab-layout',
+        data: {
+          hasHero: Boolean(heroEl),
+          heroRect: heroRect
+            ? {
+                top: Math.round(heroRect.top),
+                height: Math.round(heroRect.height),
+                bottom: Math.round(heroRect.bottom),
+              }
+            : null,
+          collabTop: Math.round(sectionRect.top),
+          collabHeight: Math.round(sectionRect.height),
+          gapToHero: heroRect ? Math.round(sectionRect.top - heroRect.bottom) : null,
+          overlapsHero: heroRect ? sectionRect.top < heroRect.bottom : null,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+
+    const centerX = Math.max(0, Math.round(titleRect.left + titleRect.width / 2));
+    const centerY = Math.max(0, Math.round(titleRect.top + titleRect.height / 2));
+    const topEl = document.elementFromPoint(centerX, centerY);
+
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: 'debug-session',
+        runId,
+        hypothesisId: 'H2',
+        location: 'CollaborationsSection.tsx:146',
+        message: 'element-from-point',
+        data: {
+          centerX,
+          centerY,
+          topTag: topEl?.tagName || null,
+          topId: topEl?.id || null,
+          topClass: topEl ? (topEl as HTMLElement).className : null,
+          isTitleOnTop: topEl === titleEl,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: 'debug-session',
+        runId,
+        hypothesisId: 'H3',
+        location: 'CollaborationsSection.tsx:171',
+        message: 'layout-rects',
+        data: {
+          titleRect: {
+            top: Math.round(titleRect.top),
+            left: Math.round(titleRect.left),
+            width: Math.round(titleRect.width),
+            height: Math.round(titleRect.height),
+          },
+          sectionRect: {
+            top: Math.round(sectionRect.top),
+            left: Math.round(sectionRect.left),
+            width: Math.round(sectionRect.width),
+            height: Math.round(sectionRect.height),
+          },
+          viewport: {
+            width: window.innerWidth,
+            height: window.innerHeight,
+          },
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+  }, [
+    reduceAnimations,
+    primaryColor,
+    accentColor,
+    backgroundPrimary,
+    preCalculatedTextColors?.title,
+    preCalculatedTextColors?.description,
+  ]);
+
+  useEffect(() => {
+    const sectionEl = sectionRef.current;
+    if (!sectionEl) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const heroEl = document.querySelector('[data-hero-section="raffle"]') as HTMLElement | null;
+          const heroRect = heroEl ? heroEl.getBoundingClientRect() : null;
+          const collabRect = sectionEl.getBoundingClientRect();
+          const sectionStyle = window.getComputedStyle(sectionEl);
+
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              sessionId: 'debug-session',
+              runId: 'collab-inview',
+              hypothesisId: 'H4',
+              location: 'CollaborationsSection.tsx:200',
+              message: 'collab-inview-layout',
+              data: {
+                hasHero: Boolean(heroEl),
+                heroBottom: heroRect ? Math.round(heroRect.bottom) : null,
+                collabTop: Math.round(collabRect.top),
+                gap: heroRect ? Math.round(collabRect.top - heroRect.bottom) : null,
+                overlaps: heroRect ? collabRect.top < heroRect.bottom : null,
+                marginTop: sectionStyle.marginTop,
+                paddingTop: sectionStyle.paddingTop,
+                viewport: { width: window.innerWidth, height: window.innerHeight },
+              },
+              timestamp: Date.now(),
+            }),
+          }).catch(() => {});
+          // #endregion
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(sectionEl);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
-      className="relative pt-6 pb-10 md:py-14 overflow-hidden -mt-12 sm:-mt-10 md:-mt-6 lg:mt-0"
+      ref={sectionRef}
+      data-collab-section="true"
+      className="relative pt-8 pb-10 md:py-14 overflow-hidden mt-0"
       style={{ backgroundColor: backgroundPrimary }}
     >
       {/* Transicion suave con el hero */}
@@ -89,11 +316,33 @@ export default function CollaborationsSection({
 
       <div className="container mx-auto px-4 max-w-7xl relative z-10">
         <motion.div
-          initial={reduceAnimations ? {} : { opacity: 0, y: 18 }}
-          whileInView={reduceAnimations ? {} : { opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={reduceAnimations ? {} : { duration: 0.45 }}
-          className="text-center mb-5 md:mb-10 -mt-6 sm:-mt-8"
+          initial={reduceAnimations ? false : { y: 18 }}
+          animate={{ y: 0 }}
+          transition={reduceAnimations ? { duration: 0 } : { duration: 0.45 }}
+          style={{ opacity: 1 }}
+          onAnimationComplete={() => {
+            const titleEl = titleRef.current;
+            const parentStyle = titleEl?.parentElement ? window.getComputedStyle(titleEl.parentElement) : null;
+            // #region agent log
+            fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                sessionId: 'debug-session',
+                runId: 'collab-title-opacity-post',
+                hypothesisId: 'H1',
+                location: 'CollaborationsSection.tsx:109',
+                message: 'title-animation-complete',
+                data: {
+                  parentOpacity: parentStyle?.opacity || null,
+                  parentFilter: parentStyle?.filter || null,
+                },
+                timestamp: Date.now(),
+              }),
+            }).catch(() => {});
+            // #endregion
+          }}
+          className="text-center mb-5 md:mb-10"
         >
           <div className="inline-flex items-center justify-center gap-3 mb-2">
             <span
@@ -109,6 +358,7 @@ export default function CollaborationsSection({
           </div>
 
           <h2
+            ref={titleRef}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 uppercase tracking-[0.12em] leading-tight"
             style={{ color: '#ffffff' }}
           >
