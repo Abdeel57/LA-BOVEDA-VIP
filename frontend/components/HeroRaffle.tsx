@@ -128,7 +128,7 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
     };
 
     return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary via-secondary to-tertiary">
+        <section className="relative min-h-[78vh] sm:min-h-[82vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary via-secondary to-tertiary">
             {/* Imagen principal como fondo de pantalla completa */}
             <div 
                 className="absolute inset-0 w-full h-full"
@@ -236,22 +236,22 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
             </div>
 
             {/* Contenido centrado sobre la imagen */}
-            <div className="container mx-auto px-4 relative z-10 min-h-screen flex flex-col justify-between py-8">
+            <div className="container mx-auto px-4 relative z-10 min-h-[78vh] sm:min-h-[82vh] md:min-h-screen flex flex-col justify-between py-6 sm:py-8">
                 {/* Título y descripción en la parte superior */}
                 <motion.div
                     initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={isMobile ? { duration: 0.4 } : { duration: 0.8 }}
-                    className="flex flex-col items-center text-center space-y-3 sm:space-y-4 pt-12 sm:pt-16 md:pt-20"
+                    className="flex flex-col items-center text-center space-y-3 sm:space-y-4 pt-10 sm:pt-14 md:pt-20"
                 >
                     {/* Título */}
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-none max-w-4xl">
+                    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight max-w-4xl">
                         {raffle.title}
                     </h1>
 
                     {/* Descripción (solo si existe) */}
                     {raffle.description && (
-                        <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-black tracking-wide max-w-2xl leading-tight">
+                        <p className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white font-black tracking-wide max-w-2xl leading-tight">
                             {raffle.description}
                         </p>
                     )}
@@ -262,14 +262,14 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
                     initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={isMobile ? { duration: 0.4, delay: 0.1 } : { duration: 0.8, delay: 0.2 }}
-                    className="flex flex-col items-center pb-8 sm:pb-12"
+                    className="flex flex-col items-center pb-5 sm:pb-10"
                 >
-                    <div className="w-full max-w-[90%] sm:max-w-[85%] md:max-w-[80%] bg-white/10 backdrop-blur-lg rounded-3xl px-5 sm:px-6 md:px-7 py-3 sm:py-4 md:py-4 border border-white/20"
+                    <div className="w-full max-w-[94%] sm:max-w-[85%] md:max-w-[80%] bg-white/10 backdrop-blur-lg rounded-3xl px-4 sm:px-6 md:px-7 py-3 sm:py-4 md:py-4 border border-white/20"
                     >
                         {/* Botón principal - Comprar Boletos - Más grande y legible */}
                         <Link
                             to={`/sorteo/${raffle.slug}`}
-                            className="inline-flex items-center justify-center gap-0 bg-accent hover:bg-accent/90 text-white font-bold text-base sm:text-lg md:text-xl px-8 sm:px-10 md:px-12 py-2.5 sm:py-3 md:py-3.5 rounded-2xl shadow-2xl hover:shadow-accent/50 hover:scale-105 transition-all duration-300 w-full mb-3 sm:mb-4"
+                            className="inline-flex items-center justify-center gap-0 bg-accent hover:bg-accent/90 text-white font-bold text-base sm:text-lg md:text-xl px-6 sm:px-10 md:px-12 py-2.5 sm:py-3 md:py-3.5 rounded-2xl shadow-2xl hover:shadow-accent/50 hover:scale-105 transition-all duration-300 w-full mb-3 sm:mb-4"
                         >
                             <span>COMPRAR BOLETOS</span>
                         </Link>

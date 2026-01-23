@@ -62,7 +62,7 @@ export default function CollaborationsSection({
 
   return (
     <section
-      className="relative pt-4 pb-10 md:py-14 overflow-hidden -mt-6 sm:-mt-8 md:-mt-4 lg:mt-0"
+      className="relative pt-3 pb-10 md:py-14 overflow-hidden -mt-10 sm:-mt-8 md:-mt-5 lg:mt-0"
       style={{ backgroundColor: backgroundPrimary }}
     >
       {/* Transicion suave con el hero */}
@@ -95,7 +95,7 @@ export default function CollaborationsSection({
           transition={reduceAnimations ? {} : { duration: 0.45 }}
           className="text-center mb-6 md:mb-10"
         >
-          <div className="inline-flex items-center justify-center gap-3 mb-3">
+          <div className="inline-flex items-center justify-center gap-3 mb-2">
             <span
               className="px-3 py-1 rounded-full text-[10px] sm:text-xs uppercase tracking-[0.35em] border"
               style={{
@@ -109,12 +109,9 @@ export default function CollaborationsSection({
           </div>
 
           <h2
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mb-3 uppercase tracking-[0.12em] leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mb-2 uppercase tracking-[0.18em] leading-tight"
             style={{
-              background: `linear-gradient(90deg, ${vipGoldSoft} 0%, ${vipGold} 45%, ${vipGoldSoft} 100%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              color: vipGoldSoft,
               textShadow: '0 8px 30px rgba(0,0,0,0.35)',
             }}
           >
