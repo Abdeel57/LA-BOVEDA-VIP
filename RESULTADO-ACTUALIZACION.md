@@ -114,3 +114,4 @@ Si después de estos pasos sigue apareciendo "Lucky Snap", avísame y revisamos 
 Solo falta reiniciar el backend y limpiar el caché del navegador.
 
 
+

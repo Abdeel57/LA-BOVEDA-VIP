@@ -204,3 +204,4 @@ El panel de administrador está completamente configurado y listo para usar. Tod
 **⚠️ No olvides cambiar la contraseña después del primer inicio de sesión.**
 
 
+

@@ -145,3 +145,4 @@ fetch('https://la-boveda-vip-production.up.railway.app/api/public/settings')
 **El backend está perfecto. Solo necesitas limpiar el caché del navegador.**
 
 
+
