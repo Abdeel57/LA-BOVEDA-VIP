@@ -7,7 +7,7 @@ import CollaborationsSection from '../components/CollaborationsSection';
 import Faq from '../components/Faq';
 import HeroRaffle from '../components/HeroRaffle';
 import { useTheme } from '../contexts/ThemeContext';
-import { Trophy, Gift, Zap } from 'lucide-react';
+import { Trophy, Gift, Zap, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useOptimizedAnimations } from '../utils/deviceDetection';
 import { useHomeData } from '../hooks/useHomeData';
@@ -118,7 +118,11 @@ const HomePage = () => {
                 <section className="py-8 md:py-12">
                     <div className="container mx-auto px-4 max-w-4xl text-center">
                         <div className="card max-w-2xl mx-auto">
-                            <div className="text-8xl mb-8">🎯</div>
+                            <div className="flex justify-center mb-8">
+                                <div className="p-5 rounded-2xl bg-gradient-to-br from-action to-accent shadow-lg">
+                                    <Target className="w-10 h-10 text-white" />
+                                </div>
+                            </div>
                             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
                                 ¡Próximamente!
                             </h2>

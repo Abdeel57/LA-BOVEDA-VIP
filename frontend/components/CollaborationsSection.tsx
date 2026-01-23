@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Play, Sparkles, BadgeCheck } from 'lucide-react';
+import { Play, Video } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useOptimizedAnimations } from '../utils/deviceDetection';
 
@@ -62,12 +62,12 @@ export default function CollaborationsSection({
       className="relative py-10 md:py-14 overflow-hidden"
       style={{ backgroundColor: appearance?.colors?.backgroundPrimary || '#111827' }}
     >
-      {/* Fondo creativo */}
+      {/* Fondo sutil */}
       <div
-        className="absolute inset-0 opacity-40 pointer-events-none"
+        className="absolute inset-0 opacity-25 pointer-events-none"
         style={{
-          background: `radial-gradient(circle at 20% 20%, ${accentColor}20 0%, transparent 55%), radial-gradient(circle at 80% 40%, ${primaryColor}25 0%, transparent 60%), radial-gradient(circle at 50% 90%, ${accentColor}15 0%, transparent 55%)`,
-          filter: 'blur(40px)',
+          background: `radial-gradient(circle at 20% 20%, ${accentColor}18 0%, transparent 55%), radial-gradient(circle at 80% 40%, ${primaryColor}20 0%, transparent 60%)`,
+          filter: 'blur(50px)',
         }}
       />
 
@@ -86,40 +86,31 @@ export default function CollaborationsSection({
           transition={reduceAnimations ? {} : { duration: 0.45 }}
           className="text-center mb-8 md:mb-10"
         >
-          <div className="inline-flex items-center justify-center gap-3 mb-4">
-            <div
-              className="p-3 rounded-2xl shadow-lg"
-              style={{
-                background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)`,
-              }}
+          <div className="inline-flex items-center justify-center gap-3 mb-3">
+            <div className="h-px w-10 bg-white/15" />
+            <span
+              className="text-xs uppercase tracking-[0.35em]"
+              style={{ color: preCalculatedTextColors.description }}
             >
-              <Sparkles className="w-8 h-8 text-white" />
-            </div>
-            <div className="p-3 rounded-2xl shadow-lg bg-white/10 backdrop-blur">
-              <BadgeCheck className="w-8 h-8 text-white" />
-            </div>
+              Invitados especiales
+            </span>
+            <div className="h-px w-10 bg-white/15" />
           </div>
 
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl font-black mb-3"
-            style={{
-              background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 55%, ${primaryColor} 100%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))',
-            }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mb-3"
+            style={{ color: preCalculatedTextColors.title }}
           >
             Colaboraciones
           </h2>
 
-          <p className="text-base md:text-lg max-w-2xl mx-auto" style={{ color: preCalculatedTextColors.description }}>
-            Mira los videos con nuestros invitados especiales. Reemplaza los videos de ejemplo por tus colaboraciones
-            reales cuando quieras.
+          <p className="text-sm sm:text-base md:text-lg max-w-2xl mx-auto" style={{ color: preCalculatedTextColors.description }}>
+            Videos con artistas e invitados destacados. Mantiene una presentacion clara y profesional en todas las
+            pantallas.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 lg:gap-8 md:overflow-visible md:mx-0 md:px-0">
           {items.map((item, index) => (
             <motion.article
               key={item.id}
@@ -127,18 +118,15 @@ export default function CollaborationsSection({
               whileInView={reduceAnimations ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={reduceAnimations ? { duration: 0.25, delay: Math.min(index * 0.06, 0.25) } : { duration: 0.45, delay: Math.min(index * 0.08, 0.35) }}
-              className="relative rounded-3xl overflow-hidden group"
+              className="relative rounded-2xl overflow-hidden group border border-white/10 bg-black/30 backdrop-blur-md shadow-md transition-all duration-300 hover:border-white/20 hover:shadow-xl snap-start min-w-[82%] sm:min-w-[70%] md:min-w-0"
             >
-              {/* Borde gradiente */}
               <div
-                className="absolute inset-0 p-[1px] rounded-3xl"
-                style={{ background: `linear-gradient(135deg, ${accentColor} 0%, ${primaryColor} 50%, ${accentColor} 100%)` }}
-              >
-                <div className="w-full h-full rounded-3xl bg-black/30 backdrop-blur" />
-              </div>
+                className="absolute inset-x-0 top-0 h-[2px]"
+                style={{ background: `linear-gradient(90deg, ${primaryColor} 0%, ${accentColor} 100%)` }}
+              />
 
-              <div className="relative z-10 p-4">
-                <div className="relative rounded-2xl overflow-hidden bg-black/50">
+              <div className="relative z-10 p-3 sm:p-4">
+                <div className="relative rounded-xl overflow-hidden bg-black/50 border border-white/10">
                   <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div
                       className="absolute inset-0"
@@ -174,10 +162,10 @@ export default function CollaborationsSection({
                   </div>
                 </div>
 
-                <div className="pt-4 px-1">
+                <div className="pt-3 px-1">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="text-xl font-black" style={{ color: preCalculatedTextColors.title }}>
+                      <h3 className="text-lg sm:text-xl font-semibold" style={{ color: preCalculatedTextColors.title }}>
                         {item.name}
                       </h3>
                       {item.subtitle && (
@@ -187,10 +175,9 @@ export default function CollaborationsSection({
                       )}
                     </div>
                     <div
-                      className="shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg"
-                      style={{ background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)` }}
+                      className="shrink-0 w-9 h-9 rounded-xl flex items-center justify-center border border-white/10 bg-white/5"
                     >
-                      <Sparkles className="w-5 h-5 text-white" />
+                      <Video className="w-5 h-5 text-white/90" />
                     </div>
                   </div>
                 </div>
