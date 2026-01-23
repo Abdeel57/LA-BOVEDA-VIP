@@ -62,7 +62,7 @@ export default function CollaborationsSection({
 
   return (
     <section
-      className="relative pt-8 pb-10 md:py-14 overflow-hidden -mt-8 sm:-mt-6 md:-mt-4 lg:mt-0"
+      className="relative pt-6 pb-10 md:py-14 overflow-hidden -mt-12 sm:-mt-10 md:-mt-6 lg:mt-0"
       style={{ backgroundColor: backgroundPrimary }}
     >
       {/* Transicion suave con el hero */}
@@ -93,7 +93,7 @@ export default function CollaborationsSection({
           whileInView={reduceAnimations ? {} : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={reduceAnimations ? {} : { duration: 0.45 }}
-          className="text-center mb-6 md:mb-10"
+          className="text-center mb-5 md:mb-10 -mt-6 sm:-mt-8"
         >
           <div className="inline-flex items-center justify-center gap-3 mb-2">
             <span
@@ -110,7 +110,7 @@ export default function CollaborationsSection({
 
           <h2
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 uppercase tracking-[0.12em] leading-tight"
-            style={{ color: preCalculatedTextColors.title }}
+            style={{ color: '#ffffff' }}
           >
             COLABORACIONES
           </h2>

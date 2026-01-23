@@ -128,7 +128,7 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
     };
 
     return (
-        <section className="relative min-h-[78vh] sm:min-h-[82vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary via-secondary to-tertiary">
+        <section className="relative min-h-[70vh] sm:min-h-[78vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary via-secondary to-tertiary">
             {/* Imagen principal como fondo de pantalla completa */}
             <div 
                 className="absolute inset-0 w-full h-full"
@@ -236,13 +236,13 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
             </div>
 
             {/* Contenido centrado sobre la imagen */}
-            <div className="container mx-auto px-4 relative z-10 min-h-[78vh] sm:min-h-[82vh] md:min-h-screen flex flex-col justify-between py-6 sm:py-8">
+            <div className="container mx-auto px-4 relative z-10 min-h-[70vh] sm:min-h-[78vh] md:min-h-screen flex flex-col justify-start md:justify-between gap-6 sm:gap-8 py-6 sm:py-8">
                 {/* Título y descripción en la parte superior */}
                 <motion.div
                     initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={isMobile ? { duration: 0.4 } : { duration: 0.8 }}
-                    className="flex flex-col items-center text-center space-y-3 sm:space-y-4 pt-10 sm:pt-14 md:pt-20"
+                    className="flex flex-col items-center text-center space-y-3 sm:space-y-4 pt-8 sm:pt-12 md:pt-20"
                 >
                     {/* Título */}
                     <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight max-w-4xl">
