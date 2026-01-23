@@ -56,12 +56,21 @@ export default function CollaborationsSection({
 
   const primaryColor = appearance?.colors?.action || '#0ea5e9';
   const accentColor = appearance?.colors?.accent || '#ec4899';
+  const backgroundPrimary = appearance?.colors?.backgroundPrimary || '#111827';
+  const vipGold = '#D4AF37';
+  const vipGoldSoft = '#F7E7A1';
 
   return (
     <section
-      className="relative py-10 md:py-14 overflow-hidden"
-      style={{ backgroundColor: appearance?.colors?.backgroundPrimary || '#111827' }}
+      className="relative pt-4 pb-10 md:py-14 overflow-hidden -mt-6 sm:-mt-8 md:-mt-4 lg:mt-0"
+      style={{ backgroundColor: backgroundPrimary }}
     >
+      {/* Transicion suave con el hero */}
+      <div
+        className="absolute inset-x-0 -top-6 h-6"
+        style={{ background: `linear-gradient(180deg, transparent 0%, ${backgroundPrimary} 100%)` }}
+      />
+
       {/* Fondo sutil */}
       <div
         className="absolute inset-0 opacity-25 pointer-events-none"
@@ -84,33 +93,40 @@ export default function CollaborationsSection({
           whileInView={reduceAnimations ? {} : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={reduceAnimations ? {} : { duration: 0.45 }}
-          className="text-center mb-8 md:mb-10"
+          className="text-center mb-6 md:mb-10"
         >
           <div className="inline-flex items-center justify-center gap-3 mb-3">
-            <div className="h-px w-10 bg-white/15" />
             <span
-              className="text-xs uppercase tracking-[0.35em]"
-              style={{ color: preCalculatedTextColors.description }}
+              className="px-3 py-1 rounded-full text-[10px] sm:text-xs uppercase tracking-[0.35em] border"
+              style={{
+                color: vipGoldSoft,
+                borderColor: `${vipGold}55`,
+                background: 'rgba(0,0,0,0.25)',
+              }}
             >
-              Invitados especiales
+              Edicion VIP
             </span>
-            <div className="h-px w-10 bg-white/15" />
           </div>
 
           <h2
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mb-3"
-            style={{ color: preCalculatedTextColors.title }}
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mb-3 uppercase tracking-[0.12em] leading-tight"
+            style={{
+              background: `linear-gradient(90deg, ${vipGoldSoft} 0%, ${vipGold} 45%, ${vipGoldSoft} 100%)`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              textShadow: '0 8px 30px rgba(0,0,0,0.35)',
+            }}
           >
             Colaboraciones
           </h2>
 
           <p className="text-sm sm:text-base md:text-lg max-w-2xl mx-auto" style={{ color: preCalculatedTextColors.description }}>
-            Videos con artistas e invitados destacados. Mantiene una presentacion clara y profesional en todas las
-            pantallas.
+            Coleccion de videos con invitados destacados y alianzas exclusivas.
           </p>
         </motion.div>
 
-        <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 lg:gap-8 md:overflow-visible md:mx-0 md:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
           {items.map((item, index) => (
             <motion.article
               key={item.id}
@@ -118,7 +134,7 @@ export default function CollaborationsSection({
               whileInView={reduceAnimations ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={reduceAnimations ? { duration: 0.25, delay: Math.min(index * 0.06, 0.25) } : { duration: 0.45, delay: Math.min(index * 0.08, 0.35) }}
-              className="relative rounded-2xl overflow-hidden group border border-white/10 bg-black/30 backdrop-blur-md shadow-md transition-all duration-300 hover:border-white/20 hover:shadow-xl snap-start min-w-[82%] sm:min-w-[70%] md:min-w-0"
+              className="relative rounded-2xl overflow-hidden group border border-white/10 bg-black/30 backdrop-blur-md shadow-md transition-all duration-300 hover:border-white/20 hover:shadow-lg"
             >
               <div
                 className="absolute inset-x-0 top-0 h-[2px]"
