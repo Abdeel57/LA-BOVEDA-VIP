@@ -155,3 +155,4 @@ Esto también actualizará la base de datos y limpiará el caché automáticamen
 
 Ejecuta el script y dime qué resultado obtuviste. Si hay algún error, cópialo completo y te ayudo a solucionarlo.
 
+

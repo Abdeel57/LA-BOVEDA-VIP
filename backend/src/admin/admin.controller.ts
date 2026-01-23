@@ -23,8 +23,13 @@ export class AdminController {
   // Dashboard
   @Roles('admin', 'superadmin')
   @Get('stats')
-  getDashboardStats() {
-    return this.adminService.getDashboardStats();
+  async getDashboardStats() {
+    try {
+      const result = await this.adminService.getDashboardStats();
+      return result;
+    } catch (error) {
+      throw error;
+    }
   }
 
   // Orders - ventas puede ver órdenes

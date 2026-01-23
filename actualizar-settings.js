@@ -3,10 +3,16 @@
 
 const { PrismaClient } = require('@prisma/client');
 
+if (!process.env.DATABASE_URL) {
+  console.error('❌ DATABASE_URL no está configurado.');
+  console.error('   Ejemplo (PowerShell): $env:DATABASE_URL="postgresql://user:password@host:port/database"');
+  process.exit(1);
+}
+
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: process.env.DATABASE_URL || 'postgresql://postgres:FYpJMnYrybVLXNhMudgUQinugvgJhvnJ@yamabiko.proxy.rlwy.net:29508/railway'
+      url: process.env.DATABASE_URL
     }
   }
 });
@@ -96,4 +102,5 @@ async function actualizarSettings() {
 }
 
 actualizarSettings();
+
 

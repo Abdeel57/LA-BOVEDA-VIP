@@ -151,11 +151,12 @@ export class AdminService {
       where: { status: 'active' },
     });
 
-    return {
+    const result = {
       todaySales: todaySales._sum.total || 0,
       pendingOrders,
       activeRaffles,
     };
+    return result;
   }
 
   // Orders
@@ -213,7 +214,7 @@ export class AdminService {
         total: order.total,
       }));
 
-      return {
+      const result = {
         orders: transformedOrders,
         pagination: {
           page,
@@ -222,6 +223,7 @@ export class AdminService {
           pages: Math.ceil(total / limit),
         },
       };
+      return result;
     } catch (error) {
       this.logger.error('Error getting orders:', error);
       // Fallback para evitar crashes

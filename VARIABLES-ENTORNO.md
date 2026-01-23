@@ -222,3 +222,4 @@ O usa un generador online seguro: https://randomkeygen.com/
   - `backend/REDIS_SETUP.md` - Configuración de Redis
   - `DEPLOY-BACKEND-RAILWAY.md` - Despliegue en Railway
 
+

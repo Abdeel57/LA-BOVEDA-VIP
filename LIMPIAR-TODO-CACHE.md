@@ -212,3 +212,4 @@ node verificar-backend-responde.js
 
 Esto me dirá exactamente qué está devolviendo el backend y dónde está el problema.
 
+

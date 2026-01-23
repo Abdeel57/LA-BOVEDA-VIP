@@ -234,3 +234,4 @@ El código ahora permite automáticamente:
 - Variables de entorno: `backend/env.example`
 - Documentación CORS: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 
+

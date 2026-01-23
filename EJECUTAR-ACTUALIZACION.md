@@ -15,10 +15,10 @@ El script ya tiene tu URL configurada, pero puedes verificar:
 
 ```bash
 # En Windows PowerShell
-$env:DATABASE_URL="postgresql://postgres:FYpJMnYrybVLXNhMudgUQinugvgJhvnJ@yamabiko.proxy.rlwy.net:29508/railway"
+$env:DATABASE_URL="postgresql://user:password@host:port/database"
 
 # O crear un archivo .env en backend/ con:
-# DATABASE_URL=postgresql://postgres:FYpJMnYrybVLXNhMudgUQinugvgJhvnJ@yamabiko.proxy.rlwy.net:29508/railway
+# DATABASE_URL=postgresql://user:password@host:port/database
 ```
 
 ### Paso 3: Ejecutar el script
@@ -236,4 +236,5 @@ CREATE TABLE IF NOT EXISTS "settings" (
 3. **Opción 3 (Railway CLI)** - Para usuarios avanzados
 
 **Recomendación:** Empieza con **Opción 2** (Railway Query) porque es la más visual y fácil de verificar.
+
 

@@ -348,3 +348,4 @@ console.log('Environment:', import.meta.env.MODE);
 
 Si estás en Railway, Netlify, Render, o cualquier servicio en la nube, **SIEMPRE** usa `production`.
 
+

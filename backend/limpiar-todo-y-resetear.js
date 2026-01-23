@@ -1,7 +1,12 @@
 // Script para limpiar TODOS los datos y dejar solo configuración básica de plantilla
 const { Client } = require('pg');
 
-const DATABASE_URL = 'postgresql://postgres:FYpJMnYrybVLXNhMudgUQinugvgJhvnJ@yamabiko.proxy.rlwy.net:29508/railway';
+const DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
+  console.error('❌ DATABASE_URL no está configurado.');
+  console.error('   Ejemplo (PowerShell): $env:DATABASE_URL="postgresql://user:password@host:port/database"');
+  process.exit(1);
+}
 
 async function limpiarTodoYResetear() {
   const client = new Client({

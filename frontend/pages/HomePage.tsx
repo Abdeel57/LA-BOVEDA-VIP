@@ -3,7 +3,7 @@ import PageAnimator from '../components/PageAnimator';
 import RaffleCard from '../components/RaffleCard';
 import Spinner from '../components/Spinner';
 import WinnerCard from '../components/WinnerCard';
-import HowItWorks from '../components/HowItWorks';
+import CollaborationsSection from '../components/CollaborationsSection';
 import Faq from '../components/Faq';
 import HeroRaffle from '../components/HeroRaffle';
 import { useTheme } from '../contexts/ThemeContext';
@@ -133,25 +133,8 @@ const HomePage = () => {
                 </section>
             )}
 
-            {/* How It Works Section */}
-            <section 
-                className="py-8 md:py-12 relative z-10 overflow-visible"
-                style={{
-                    backgroundColor: appearance?.colors?.backgroundPrimary || '#111827'
-                }}
-            >
-                {/* Difuminado con color de acento */}
-                <div 
-                    className="absolute inset-0 opacity-30 pointer-events-none"
-                    style={{
-                        background: `radial-gradient(circle at 50% 50%, ${accentColor}20 0%, transparent 70%)`,
-                        filter: 'blur(60px)'
-                    }}
-                />
-                <div className="relative z-10">
-                    <HowItWorks />
-                </div>
-            </section>
+            {/* Collaborations Section */}
+            <CollaborationsSection />
 
             {/* Past Winners */}
             {!loading && winners.length > 0 && (
