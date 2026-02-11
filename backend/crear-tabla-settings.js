@@ -42,6 +42,7 @@ async function crearTablaSettings() {
         "facebookUrl" TEXT,
         "instagramUrl" TEXT,
         "tiktokUrl" TEXT,
+        "collaborationVideoUrl" TEXT,
         "titleColor" TEXT,
         "subtitleColor" TEXT,
         "descriptionColor" TEXT,

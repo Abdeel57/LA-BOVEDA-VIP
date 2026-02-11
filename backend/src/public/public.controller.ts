@@ -84,6 +84,7 @@ export class PublicController {
           instagramUrl: '',
           tiktokUrl: '',
         },
+        collaborationVideoUrl: '',
         paymentAccounts: [],
         faqs: [],
         createdAt: new Date().toISOString(),
@@ -100,6 +101,7 @@ export class PublicController {
       siteName: 'LA BOVEDA VIP',
       paymentAccounts: [],
       faqs: [],
+      collaborationVideoUrl: '',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -131,6 +133,7 @@ export class PublicController {
       siteName: 'LA BOVEDA VIP',
       paymentAccounts: [],
       faqs: [],
+      collaborationVideoUrl: '',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -146,6 +149,7 @@ export class PublicController {
         siteName: 'LA BOVEDA VIP',
         paymentAccounts: [],
         faqs: [],
+        collaborationVideoUrl: '',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }

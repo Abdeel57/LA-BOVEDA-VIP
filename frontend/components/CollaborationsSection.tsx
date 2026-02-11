@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Video } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
@@ -46,15 +46,86 @@ const DEFAULT_COLLABS: CollaborationVideo[] = [
   },
 ];
 
+const extractYouTubeId = (rawUrl: string): string | null => {
+  const trimmed = rawUrl.trim();
+  if (!trimmed) return null;
+
+  const normalized = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+
+  try {
+    const parsed = new URL(normalized);
+    const host = parsed.hostname.replace(/^www\./, '');
+
+    if (host === 'youtu.be') {
+      const id = parsed.pathname.split('/').filter(Boolean)[0];
+      return id || null;
+    }
+
+    if (host.endsWith('youtube.com')) {
+      const paramId = parsed.searchParams.get('v');
+      if (paramId) return paramId;
+
+      const parts = parsed.pathname.split('/').filter(Boolean);
+      const embedIndex = parts.indexOf('embed');
+      if (embedIndex >= 0 && parts[embedIndex + 1]) {
+        return parts[embedIndex + 1];
+      }
+
+      const shortsIndex = parts.indexOf('shorts');
+      if (shortsIndex >= 0 && parts[shortsIndex + 1]) {
+        return parts[shortsIndex + 1];
+      }
+    }
+  } catch (error) {
+    return null;
+  }
+
+  return null;
+};
+
+const buildCollaborationFromUrl = (rawUrl: string): CollaborationVideo | null => {
+  const trimmed = rawUrl.trim();
+  if (!trimmed) return null;
+
+  const youtubeId = extractYouTubeId(trimmed);
+  if (youtubeId) {
+    return {
+      id: 'collab-main',
+      name: 'Colaboración VIP',
+      subtitle: 'Video destacado',
+      kind: 'youtube',
+      embedUrl: `https://www.youtube-nocookie.com/embed/${youtubeId}`,
+    };
+  }
+
+  return {
+    id: 'collab-main',
+    name: 'Colaboración VIP',
+    subtitle: 'Video destacado',
+    kind: 'mp4',
+    src: trimmed,
+  };
+};
+
 export default function CollaborationsSection({
   items = DEFAULT_COLLABS,
+  videoUrl,
 }: {
   items?: CollaborationVideo[];
+  videoUrl?: string;
 }) {
   const reduceAnimations = useOptimizedAnimations();
   const { appearance, preCalculatedTextColors } = useTheme();
   const sectionRef = useRef<HTMLElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
+
+  const resolvedItems = useMemo(() => {
+    if (videoUrl && videoUrl.trim()) {
+      const normalized = buildCollaborationFromUrl(videoUrl);
+      return normalized ? [normalized] : items;
+    }
+    return items;
+  }, [items, videoUrl]);
 
   const primaryColor = appearance?.colors?.action || '#0ea5e9';
   const accentColor = appearance?.colors?.accent || '#ec4899';
@@ -371,7 +442,7 @@ export default function CollaborationsSection({
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-          {items.map((item, index) => (
+              {resolvedItems.map((item, index) => (
             <motion.article
               key={item.id}
               initial={reduceAnimations ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}

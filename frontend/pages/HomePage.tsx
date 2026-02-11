@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PageAnimator from '../components/PageAnimator';
 import RaffleCard from '../components/RaffleCard';
 import Spinner from '../components/Spinner';
@@ -12,11 +12,13 @@ import { motion } from 'framer-motion';
 import { useOptimizedAnimations } from '../utils/deviceDetection';
 import { useHomeData } from '../hooks/useHomeData';
 import { Raffle } from '../types';
+import { getSettings } from '../services/api';
 
 const HomePage = () => {
     const { raffles, winners, loading, mainRaffle, otherRaffles } = useHomeData();
     const reduceAnimations = useOptimizedAnimations();
     const { appearance, preCalculatedTextColors } = useTheme();
+    const [collaborationVideoUrl, setCollaborationVideoUrl] = useState('');
     
     // Obtener colores del tema o usar valores por defecto
     const primaryColor = appearance?.colors?.action || '#0ea5e9';
@@ -42,6 +44,22 @@ const HomePage = () => {
     }, [mainRaffle]);
 
     const resolvedMainRaffle = mainRaffle ?? debugMainRaffle;
+
+    useEffect(() => {
+        let isMounted = true;
+        getSettings()
+            .then((settings) => {
+                if (isMounted) {
+                    setCollaborationVideoUrl(settings.collaborationVideoUrl || '');
+                }
+            })
+            .catch((error) => {
+                console.error('Error loading collaboration video URL:', error);
+            });
+        return () => {
+            isMounted = false;
+        };
+    }, []);
     useEffect(() => {
         const heroEl = document.querySelector('[data-hero-section="raffle"]') as HTMLElement | null;
         const collabEl = document.querySelector('[data-collab-section="true"]') as HTMLElement | null;
@@ -190,7 +208,7 @@ const HomePage = () => {
             )}
 
             {/* Collaborations Section */}
-            <CollaborationsSection />
+            <CollaborationsSection videoUrl={collaborationVideoUrl} />
 
             {/* Past Winners */}
             {!loading && winners.length > 0 && (

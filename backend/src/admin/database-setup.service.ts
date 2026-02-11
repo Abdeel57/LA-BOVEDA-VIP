@@ -353,8 +353,18 @@ export class DatabaseSetupService {
         await this.prisma.$executeRawUnsafe(`ALTER TABLE "settings" ADD COLUMN IF NOT EXISTS "descriptionColor" TEXT;`);
         this.logger.log('✅ Added descriptionColor column to settings table');
       }
+
+      const collaborationVideoUrlExists = await this.prisma.$queryRaw<Array<{column_name: string}>>`
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name = 'settings' AND column_name = 'collaborationVideoUrl'
+      `;
+      if (collaborationVideoUrlExists.length === 0) {
+        await this.prisma.$executeRawUnsafe(`ALTER TABLE "settings" ADD COLUMN IF NOT EXISTS "collaborationVideoUrl" TEXT;`);
+        this.logger.log('✅ Added collaborationVideoUrl column to settings table');
+      }
     } catch (error) {
-      this.logger.warn('⚠️ Error checking/adding text color columns to settings table:', error);
+      this.logger.warn('⚠️ Error checking/adding settings columns to settings table:', error);
     }
   }
 }

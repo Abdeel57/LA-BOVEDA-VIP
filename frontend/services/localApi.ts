@@ -7,6 +7,7 @@ const HARDCODED_SETTINGS: Settings = {
   siteName: 'LA BOVEDA VIP',
   paymentAccounts: [],
   faqs: [],
+  collaborationVideoUrl: '',
   createdAt: new Date(),
   updatedAt: new Date(),
 };

@@ -131,6 +131,7 @@ export interface Settings {
         instagramUrl: string;
         tiktokUrl: string;
     };
+    collaborationVideoUrl?: string;
     paymentAccounts: PaymentAccount[];
     faqs: FaqItemData[];
     displayPreferences?: DisplayPreferences;

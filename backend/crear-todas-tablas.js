@@ -205,6 +205,7 @@ async function crearTodasTablas() {
         "facebookUrl" TEXT,
         "instagramUrl" TEXT,
         "tiktokUrl" TEXT,
+        "collaborationVideoUrl" TEXT,
         "paymentAccounts" JSONB,
         "faqs" JSONB,
         "displayPreferences" JSONB,
@@ -218,14 +219,14 @@ async function crearTodasTablas() {
     const columnasSettings = [
       'titleColor', 'subtitleColor', 'descriptionColor',
       'emailFromName', 'emailReplyTo', 'emailSubject',
-      'displayPreferences'
+      'displayPreferences', 'collaborationVideoUrl'
     ];
 
     for (const columna of columnasSettings) {
       try {
         await client.query(`
           ALTER TABLE "settings" 
-          ADD COLUMN IF NOT EXISTS "${columna}" ${columna.includes('Color') || columna === 'emailFromName' || columna === 'emailReplyTo' || columna === 'emailSubject' ? 'TEXT' : 'JSONB'};
+          ADD COLUMN IF NOT EXISTS "${columna}" ${columna.includes('Color') || columna === 'emailFromName' || columna === 'emailReplyTo' || columna === 'emailSubject' || columna === 'collaborationVideoUrl' ? 'TEXT' : 'JSONB'};
         `);
       } catch (error) {
         // La columna ya existe, continuar

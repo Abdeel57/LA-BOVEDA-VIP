@@ -1556,6 +1556,7 @@ export class AdminService {
         paymentAccounts,
         faqs,
         displayPreferences,
+        collaborationVideoUrl,
       } = data;
 
       // Extract appearance data
@@ -1595,6 +1596,11 @@ export class AdminService {
         facebookUrl: socialData.facebookUrl || null,
         instagramUrl: socialData.instagramUrl || null,
         tiktokUrl: socialData.tiktokUrl || null,
+
+        // Collaboration video
+        collaborationVideoUrl: typeof collaborationVideoUrl === 'string' && collaborationVideoUrl.trim() !== ''
+          ? collaborationVideoUrl.trim()
+          : null,
 
         // Other settings - Ensure proper serialization
         paymentAccounts: this.safeStringify(paymentAccounts),
@@ -1657,6 +1663,7 @@ export class AdminService {
                 "facebookUrl" TEXT,
                 "instagramUrl" TEXT,
                 "tiktokUrl" TEXT,
+                "collaborationVideoUrl" TEXT,
                 "paymentAccounts" JSONB,
                 "faqs" JSONB,
                 "displayPreferences" JSONB,
@@ -1683,7 +1690,7 @@ export class AdminService {
               "id", "siteName", "logo", "favicon", "logoAnimation",
               "primaryColor", "secondaryColor", "accentColor", "actionColor",
               "whatsapp", "email", "emailFromName", "emailReplyTo", "emailSubject",
-              "facebookUrl", "instagramUrl", "tiktokUrl",
+              "facebookUrl", "instagramUrl", "tiktokUrl", "collaborationVideoUrl",
               "paymentAccounts", "faqs", "displayPreferences",
               "createdAt", "updatedAt"
             ) VALUES (
@@ -1704,6 +1711,7 @@ export class AdminService {
               ${settingsData.facebookUrl},
               ${settingsData.instagramUrl},
               ${settingsData.tiktokUrl},
+              ${settingsData.collaborationVideoUrl},
               ${paymentAccountsJson}::jsonb,
               ${faqsJson}::jsonb,
               ${displayPreferencesJson}::jsonb,
@@ -1727,6 +1735,7 @@ export class AdminService {
               "facebookUrl" = EXCLUDED."facebookUrl",
               "instagramUrl" = EXCLUDED."instagramUrl",
               "tiktokUrl" = EXCLUDED."tiktokUrl",
+              "collaborationVideoUrl" = EXCLUDED."collaborationVideoUrl",
               "paymentAccounts" = EXCLUDED."paymentAccounts",
               "faqs" = EXCLUDED."faqs",
               "displayPreferences" = EXCLUDED."displayPreferences",
@@ -1814,6 +1823,7 @@ export class AdminService {
         instagramUrl: settings.instagramUrl || '',
         tiktokUrl: settings.tiktokUrl || '',
       },
+      collaborationVideoUrl: settings.collaborationVideoUrl || '',
       paymentAccounts: this.parseJsonField(settings.paymentAccounts),
       faqs: this.parseJsonField(settings.faqs),
       displayPreferences: this.parseJsonField(settings.displayPreferences),

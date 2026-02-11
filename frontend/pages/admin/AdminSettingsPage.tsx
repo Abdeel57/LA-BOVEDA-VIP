@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { getSettings, adminUpdateSettings } from '../../services/api';
 import { Settings, AppearanceSettings } from '../../types';
-import { Plus, Trash2, Save, RefreshCw, Palette, Globe, CreditCard, HelpCircle, Eye, Mail } from 'lucide-react';
+import { Plus, Trash2, Save, RefreshCw, Palette, Globe, CreditCard, HelpCircle, Eye, Mail, Video } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Spinner from '../../components/Spinner';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -712,6 +712,26 @@ const AdminSettingsPage = () => {
                                 <label className={labelClasses}>TikTok</label>
                                 <input {...register('socialLinks.tiktokUrl')} className={inputClasses} placeholder="https://tiktok.com/@tu-perfil" />
                             </div>
+                        </div>
+                    </OptimizedSectionWrapper>
+
+                    {/* Collaborations Section */}
+                    <OptimizedSectionWrapper
+                        title="Colaboraciones"
+                        icon={Video}
+                        description="Configura el video principal que aparece en la sección de colaboraciones"
+                    >
+                        <div>
+                            <label className={labelClasses}>Link del Video</label>
+                            <input
+                                {...register('collaborationVideoUrl')}
+                                type="url"
+                                className={inputClasses}
+                                placeholder="https://www.youtube.com/watch?v=..."
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                                Puedes usar enlaces de YouTube o videos directos (.mp4).
+                            </p>
                         </div>
                     </OptimizedSectionWrapper>
 

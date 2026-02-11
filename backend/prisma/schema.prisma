@@ -146,6 +146,9 @@ model Settings {
   facebookUrl     String?
   instagramUrl    String?
   tiktokUrl       String?
+
+  // Collaboration video (homepage)
+  collaborationVideoUrl String?
   
   // Other settings
   paymentAccounts Json?
