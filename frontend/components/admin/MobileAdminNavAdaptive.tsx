@@ -14,10 +14,6 @@ const MobileAdminNavAdaptive = ({ navLinks }: MobileAdminNavAdaptiveProps) => {
     const { user } = useAuth();
     const isVendedor = user?.role === 'ventas';
     
-    // Debug: Verificar qué links se reciben
-    console.log('📱 MobileAdminNavAdaptive - Links recibidos:', navLinks.map(l => ({ to: l.to, text: l.text })));
-    console.log('📱 MobileAdminNavAdaptive - Total links:', navLinks.length);
-    
     // Encontrar el elemento activo actual
     const currentNav = navLinks.find(nav => nav.to === location.pathname);
     

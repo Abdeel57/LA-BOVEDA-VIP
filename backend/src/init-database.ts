@@ -130,6 +130,7 @@ export class InitDatabaseService {
             "instagramUrl" TEXT,
             "tiktokUrl" TEXT,
             "collaborationVideoUrl" TEXT,
+            "collaborations" JSONB,
             "paymentAccounts" JSONB,
             "faqs" JSONB,
             "displayPreferences" JSONB,

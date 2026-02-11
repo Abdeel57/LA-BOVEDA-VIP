@@ -206,6 +206,7 @@ async function crearTodasTablas() {
         "instagramUrl" TEXT,
         "tiktokUrl" TEXT,
         "collaborationVideoUrl" TEXT,
+        "collaborations" JSONB,
         "paymentAccounts" JSONB,
         "faqs" JSONB,
         "displayPreferences" JSONB,
@@ -219,7 +220,7 @@ async function crearTodasTablas() {
     const columnasSettings = [
       'titleColor', 'subtitleColor', 'descriptionColor',
       'emailFromName', 'emailReplyTo', 'emailSubject',
-      'displayPreferences', 'collaborationVideoUrl'
+      'displayPreferences', 'collaborationVideoUrl', 'collaborations'
     ];
 
     for (const columna of columnasSettings) {

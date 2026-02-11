@@ -85,6 +85,7 @@ export class PublicController {
           tiktokUrl: '',
         },
         collaborationVideoUrl: '',
+        collaborations: [],
         paymentAccounts: [],
         faqs: [],
         createdAt: new Date().toISOString(),
@@ -102,6 +103,7 @@ export class PublicController {
       paymentAccounts: [],
       faqs: [],
       collaborationVideoUrl: '',
+      collaborations: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -134,6 +136,7 @@ export class PublicController {
       paymentAccounts: [],
       faqs: [],
       collaborationVideoUrl: '',
+      collaborations: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -150,6 +153,7 @@ export class PublicController {
         paymentAccounts: [],
         faqs: [],
         collaborationVideoUrl: '',
+        collaborations: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }

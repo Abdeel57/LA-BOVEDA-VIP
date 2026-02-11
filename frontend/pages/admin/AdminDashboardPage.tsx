@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Ticket, Users, BarChart3, Calendar, DollarSign, List, TrendingUp, Clock, CheckCircle, AlertCircle, Package, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
-import MetaPixelManager from '../../components/admin/MetaPixelManager';
 import { getDashboardStats, getOrders, getRaffles } from '../../services/api';
 import { Order, Raffle } from '../../types';
 import Spinner from '../../components/Spinner';
 import { useAuth } from '../../contexts/AuthContext';
+
+const MetaPixelManager = lazy(() => import('../../components/admin/MetaPixelManager'));
 
 const QuickActionCard = ({ 
     icon: Icon, 
@@ -546,7 +547,9 @@ const AdminDashboardPage: React.FC = () => {
             )}
 
             {activeTab === 'meta' && !isVendedor && (
-                <MetaPixelManager />
+                <Suspense fallback={<div className="p-6 text-center text-gray-500">Cargando configuración...</div>}>
+                    <MetaPixelManager />
+                </Suspense>
             )}
 
         </div>

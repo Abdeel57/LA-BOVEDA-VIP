@@ -93,6 +93,12 @@ export interface FaqItemData {
     answer: string;
 }
 
+export interface CollaborationEntry {
+    title?: string;
+    description?: string;
+    videoUrl?: string;
+}
+
 export type LogoAnimation = 'none' | 'rotate' | 'pulse' | 'bounce';
 
 export interface AppearanceSettings {
@@ -132,6 +138,7 @@ export interface Settings {
         tiktokUrl: string;
     };
     collaborationVideoUrl?: string;
+    collaborations?: CollaborationEntry[];
     paymentAccounts: PaymentAccount[];
     faqs: FaqItemData[];
     displayPreferences?: DisplayPreferences;

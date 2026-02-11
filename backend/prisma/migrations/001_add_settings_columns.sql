@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS "settings" (
     "instagramUrl" TEXT,
     "twitterUrl" TEXT,
     "collaborationVideoUrl" TEXT,
+    "collaborations" JSONB,
     "paymentAccounts" JSONB,
     "faqs" JSONB,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -89,6 +90,11 @@ BEGIN
     -- Add collaborationVideoUrl column
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'settings' AND column_name = 'collaborationVideoUrl') THEN
         ALTER TABLE "settings" ADD COLUMN "collaborationVideoUrl" TEXT;
+    END IF;
+
+    -- Add collaborations column
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'settings' AND column_name = 'collaborations') THEN
+        ALTER TABLE "settings" ADD COLUMN "collaborations" JSONB;
     END IF;
 END $$;
 

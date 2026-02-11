@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { getSettings, adminUpdateSettings } from '../../services/api';
-import { Settings, AppearanceSettings } from '../../types';
+import { Settings, AppearanceSettings, CollaborationEntry } from '../../types';
 import { Plus, Trash2, Save, RefreshCw, Palette, Globe, CreditCard, HelpCircle, Eye, Mail, Video } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Spinner from '../../components/Spinner';
@@ -34,6 +34,25 @@ const OptimizedSectionWrapper: React.FC<{
 
 const inputClasses = "w-full mt-1 p-3 border border-gray-300 rounded-xl bg-white text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200";
 const labelClasses = "block text-sm font-semibold text-gray-700 mb-2";
+
+const defaultCollaborations: CollaborationEntry[] = [
+    { title: '', description: '', videoUrl: '' },
+    { title: '', description: '', videoUrl: '' },
+    { title: '', description: '', videoUrl: '' },
+];
+
+const normalizeCollaborations = (collaborations?: CollaborationEntry[]) => {
+    const normalized = Array.isArray(collaborations) ? collaborations : [];
+    const cleaned = normalized.map((entry) => ({
+        title: entry?.title || '',
+        description: entry?.description || '',
+        videoUrl: entry?.videoUrl || '',
+    }));
+    while (cleaned.length < 3) {
+        cleaned.push({ title: '', description: '', videoUrl: '' });
+    }
+    return cleaned.slice(0, 3);
+};
 
 // Componente simplificado de preview de colores
 const SimpleColorPreview: React.FC<{
@@ -217,6 +236,7 @@ const AdminSettingsPage = () => {
 
     const { fields: paymentFields, append: appendPayment, remove: removePayment } = useFieldArray({ control, name: "paymentAccounts" });
     const { fields: faqFields, append: appendFaq, remove: removeFaq } = useFieldArray({ control, name: "faqs" });
+    const { fields: collaborationFields, replace: replaceCollaborations } = useFieldArray({ control, name: "collaborations" });
 
     useEffect(() => {
         getSettings().then(data => {
@@ -264,9 +284,13 @@ const AdminSettingsPage = () => {
                 });
             }
 
+            const normalizedCollaborations = normalizeCollaborations(data.collaborations);
+            replaceCollaborations(normalizedCollaborations);
+
             // Reset del formulario con datos parseados
             reset({
                 ...data,
+                collaborations: normalizedCollaborations,
                 displayPreferences: displayPrefs || {
                     listingMode: 'paginado',
                     paidTicketsVisibility: 'a_la_vista'
@@ -275,9 +299,10 @@ const AdminSettingsPage = () => {
             setLoading(false);
         }).catch(error => {
             console.error('Error loading settings:', error);
+            replaceCollaborations(defaultCollaborations);
             setLoading(false);
         });
-    }, [reset, setValue]);
+    }, [reset, setValue, replaceCollaborations]);
 
     const handleColorChange = (colors: {
         primary: string;
@@ -361,6 +386,7 @@ const AdminSettingsPage = () => {
                     instagramUrl: data.socialLinks?.instagramUrl || '',
                     tiktokUrl: data.socialLinks?.tiktokUrl || '',
                 },
+                collaborations: data.collaborations || [],
                 paymentAccounts: data.paymentAccounts || [],
                 faqs: data.faqs || [],
             };
@@ -719,18 +745,45 @@ const AdminSettingsPage = () => {
                     <OptimizedSectionWrapper
                         title="Colaboraciones"
                         icon={Video}
-                        description="Configura el video principal que aparece en la sección de colaboraciones"
+                        description="Configura los 3 videos que aparecen en la sección de colaboraciones"
                     >
-                        <div>
-                            <label className={labelClasses}>Link del Video</label>
-                            <input
-                                {...register('collaborationVideoUrl')}
-                                type="url"
-                                className={inputClasses}
-                                placeholder="https://www.youtube.com/watch?v=..."
-                            />
-                            <p className="text-xs text-gray-500 mt-1">
-                                Puedes usar enlaces de YouTube o videos directos (.mp4).
+                        <div className="space-y-4">
+                            {collaborationFields.map((field, index) => (
+                                <div key={field.id} className="p-4 border border-gray-200 rounded-xl">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <h4 className="text-sm font-semibold text-gray-900">Video {index + 1}</h4>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="md:col-span-2">
+                                            <label className={labelClasses}>Link del Video</label>
+                                            <input
+                                                {...register(`collaborations.${index}.videoUrl`)}
+                                                type="url"
+                                                className={inputClasses}
+                                                placeholder="https://www.youtube.com/watch?v=..."
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className={labelClasses}>Título</label>
+                                            <input
+                                                {...register(`collaborations.${index}.title`)}
+                                                className={inputClasses}
+                                                placeholder="Nombre del invitado"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className={labelClasses}>Descripción</label>
+                                            <input
+                                                {...register(`collaborations.${index}.description`)}
+                                                className={inputClasses}
+                                                placeholder="Colaboración especial"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            <p className="text-xs text-gray-500">
+                                Se muestran hasta 3 videos. Si dejas un link vacío, ese video no aparecerá.
                             </p>
                         </div>
                     </OptimizedSectionWrapper>

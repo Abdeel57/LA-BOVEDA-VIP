@@ -149,6 +149,9 @@ model Settings {
 
   // Collaboration video (homepage)
   collaborationVideoUrl String?
+
+  // Collaborations (homepage)
+  collaborations  Json?
   
   // Other settings
   paymentAccounts Json?

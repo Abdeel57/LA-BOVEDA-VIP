@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Raffle } from '../types';
@@ -15,9 +15,6 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
     const [touchStart, setTouchStart] = useState<number | null>(null);
     const [touchEnd, setTouchEnd] = useState<number | null>(null);
     const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
-    const heroSectionRef = useRef<HTMLElement | null>(null);
-    const heroContentRef = useRef<HTMLDivElement | null>(null);
-    const purchaseCardRef = useRef<HTMLDivElement | null>(null);
 
     // Preparar imágenes: incluir imagen principal + galería (evitando duplicados)
     const allImages = (() => {
@@ -100,100 +97,7 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
     // Detectar móvil para desactivar animaciones
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
-    useEffect(() => {
-        const runId = 'hero-layout-pre';
-        const sectionEl = heroSectionRef.current;
-        const contentEl = heroContentRef.current;
-        const cardEl = purchaseCardRef.current;
-
-        if (!sectionEl || !contentEl || !cardEl) {
-            // #region agent log
-            fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    sessionId: 'debug-session',
-                    runId,
-                    hypothesisId: 'H4',
-                    location: 'HeroRaffle.tsx:104',
-                    message: 'missing-refs',
-                    data: {
-                        hasSection: Boolean(sectionEl),
-                        hasContent: Boolean(contentEl),
-                        hasCard: Boolean(cardEl),
-                    },
-                    timestamp: Date.now(),
-                }),
-            }).catch(() => {});
-            // #endregion
-            return;
-        }
-
-        const sectionRect = sectionEl.getBoundingClientRect();
-        const contentRect = contentEl.getBoundingClientRect();
-        const cardRect = cardEl.getBoundingClientRect();
-        const sectionStyle = window.getComputedStyle(sectionEl);
-        const contentStyle = window.getComputedStyle(contentEl);
-
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                sessionId: 'debug-session',
-                runId,
-                hypothesisId: 'H4',
-                location: 'HeroRaffle.tsx:135',
-                message: 'hero-layout-rects',
-                data: {
-                    viewport: { width: window.innerWidth, height: window.innerHeight },
-                    sectionRect: {
-                        top: Math.round(sectionRect.top),
-                        left: Math.round(sectionRect.left),
-                        width: Math.round(sectionRect.width),
-                        height: Math.round(sectionRect.height),
-                        bottom: Math.round(sectionRect.bottom),
-                    },
-                    contentRect: {
-                        top: Math.round(contentRect.top),
-                        height: Math.round(contentRect.height),
-                        bottom: Math.round(contentRect.bottom),
-                    },
-                    cardRect: {
-                        top: Math.round(cardRect.top),
-                        height: Math.round(cardRect.height),
-                        bottom: Math.round(cardRect.bottom),
-                    },
-                    overflowsHero: cardRect.bottom > sectionRect.bottom + 2,
-                    overflowsViewport: cardRect.bottom > window.innerHeight + 2,
-                },
-                timestamp: Date.now(),
-            }),
-        }).catch(() => {});
-        // #endregion
-
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                sessionId: 'debug-session',
-                runId,
-                hypothesisId: 'H5',
-                location: 'HeroRaffle.tsx:165',
-                message: 'hero-layout-styles',
-                data: {
-                    sectionMinHeight: sectionStyle.minHeight,
-                    sectionHeight: sectionStyle.height,
-                    contentPaddingTop: contentStyle.paddingTop,
-                    contentPaddingBottom: contentStyle.paddingBottom,
-                    contentGap: contentStyle.rowGap,
-                },
-                timestamp: Date.now(),
-            }),
-        }).catch(() => {});
-        // #endregion
-    }, [isMobile, currentImageIndex]);
+    // Logs de layout removidos: no necesarios en producción
 
     // Funciones para manejar swipe en móviles
     const minSwipeDistance = 50;
@@ -227,7 +131,6 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
 
     return (
         <section
-            ref={heroSectionRef}
             data-hero-section="raffle"
             className="relative min-h-[70vh] sm:min-h-[78vh] md:min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary via-secondary to-tertiary"
         >
@@ -338,10 +241,7 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
             </div>
 
             {/* Contenido centrado sobre la imagen */}
-            <div
-                ref={heroContentRef}
-                className="container mx-auto px-4 relative z-10 min-h-[70vh] sm:min-h-[78vh] md:min-h-screen flex flex-col justify-start md:justify-between gap-6 sm:gap-8 py-6 sm:py-8"
-            >
+            <div className="container mx-auto px-4 relative z-10 min-h-[70vh] sm:min-h-[78vh] md:min-h-screen flex flex-col justify-start md:justify-between gap-6 sm:gap-8 py-6 sm:py-8">
                 {/* Título y descripción en la parte superior */}
                 <motion.div
                     initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 30 }}
@@ -369,10 +269,7 @@ const HeroRaffle: React.FC<HeroRaffleProps> = ({ raffle }) => {
                     transition={isMobile ? { duration: 0.4, delay: 0.1 } : { duration: 0.8, delay: 0.2 }}
                     className="flex flex-col items-center pb-5 sm:pb-10"
                 >
-                    <div
-                        ref={purchaseCardRef}
-                        className="w-full max-w-[94%] sm:max-w-[85%] md:max-w-[80%] bg-white/10 backdrop-blur-lg rounded-3xl px-4 sm:px-6 md:px-7 py-3 sm:py-4 md:py-4 border border-white/20"
-                    >
+                    <div className="w-full max-w-[94%] sm:max-w-[85%] md:max-w-[80%] bg-white/10 backdrop-blur-lg rounded-3xl px-4 sm:px-6 md:px-7 py-3 sm:py-4 md:py-4 border border-white/20">
                         {/* Botón principal - Comprar Boletos - Más grande y legible */}
                         <Link
                             to={`/sorteo/${raffle.slug}`}

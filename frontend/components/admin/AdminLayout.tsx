@@ -21,11 +21,8 @@ const AdminLayout = () => {
     // Filtrar opciones del menú según el rol
     const getFilteredNavLinks = () => {
         if (!user) {
-            console.log('⚠️ No hay usuario, mostrando todos los links');
             return navLinks;
         }
-        
-        console.log('👤 Usuario:', user.name, '| Rol:', user.role);
         
         // Vendedores solo ven Apartados y Clientes
         if (user.role === 'ventas') {
@@ -34,21 +31,13 @@ const AdminLayout = () => {
                 link.to === '/admin/clientes' ||
                 link.to === '/admin' // Inicio siempre visible
             );
-            console.log('💰 Usuario ventas - Links filtrados:', filtered.map(l => l.text));
             return filtered;
         }
-        
-        // Superadmin y admin ven todo
-        console.log('🛡️ Usuario admin - Mostrando todos los links');
         return navLinks;
     };
 
     const filteredNavLinks = getFilteredNavLinks();
     
-    // Debug: Verificar qué links se están pasando al componente móvil
-    console.log('📱 AdminLayout - filteredNavLinks pasados a Mobile:', filteredNavLinks.map(l => ({ to: l.to, text: l.text })));
-    console.log('📱 AdminLayout - Total filteredNavLinks:', filteredNavLinks.length);
-
     return (
         <div className="min-h-screen bg-gray-100 text-gray-800 flex">
             {/* Sidebar for Desktop */}

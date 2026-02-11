@@ -298,6 +298,7 @@ export class PublicService {
             accentColor: '#ec4899',
             actionColor: '#0ea5e9',
             collaborationVideoUrl: null,
+            collaborations: JSON.stringify([]),
             paymentAccounts: JSON.stringify([]),
             faqs: JSON.stringify([]),
           },
@@ -345,6 +346,7 @@ export class PublicService {
           tiktokUrl: '',
         },
         collaborationVideoUrl: '',
+        collaborations: [],
         paymentAccounts: [],
         faqs: [],
         createdAt: new Date(),
@@ -386,12 +388,30 @@ export class PublicService {
         tiktokUrl: settings.tiktokUrl || '',
       },
       collaborationVideoUrl: settings.collaborationVideoUrl || '',
+      collaborations: this.normalizeCollaborations(settings),
       paymentAccounts: this.parseJsonField(settings.paymentAccounts),
       faqs: this.parseJsonField(settings.faqs),
       displayPreferences: this.parseJsonField(settings.displayPreferences),
       createdAt: settings.createdAt,
       updatedAt: settings.updatedAt,
     };
+  }
+
+  private normalizeCollaborations(settings: any) {
+    const parsed = this.parseJsonField(settings.collaborations);
+    const normalized = Array.isArray(parsed) ? parsed : [];
+    if (normalized.length > 0) {
+      return normalized;
+    }
+    const fallbackUrl = settings.collaborationVideoUrl;
+    if (typeof fallbackUrl === 'string' && fallbackUrl.trim() !== '') {
+      return [{
+        title: 'Colaboración VIP',
+        description: '',
+        videoUrl: fallbackUrl.trim(),
+      }];
+    }
+    return [];
   }
 
   private parseJsonField(field: any) {

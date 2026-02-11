@@ -1557,12 +1557,21 @@ export class AdminService {
         faqs,
         displayPreferences,
         collaborationVideoUrl,
+        collaborations,
       } = data;
 
       // Extract appearance data
       const appearanceData = appearance || {};
       const contactData = contactInfo || {};
       const socialData = socialLinks || {};
+      const normalizedCollaborations = Array.isArray(collaborations) ? collaborations : [];
+      const firstCollaborationUrl = normalizedCollaborations.find(
+        (entry: any) => typeof entry?.videoUrl === 'string' && entry.videoUrl.trim() !== ''
+      )?.videoUrl?.trim();
+      const resolvedCollaborationVideoUrl =
+        typeof collaborationVideoUrl === 'string' && collaborationVideoUrl.trim() !== ''
+          ? collaborationVideoUrl.trim()
+          : firstCollaborationUrl || null;
 
       // Usar logo como favicon automáticamente si no hay favicon específico
       const logoUrl = appearanceData.logo || null;
@@ -1598,9 +1607,8 @@ export class AdminService {
         tiktokUrl: socialData.tiktokUrl || null,
 
         // Collaboration video
-        collaborationVideoUrl: typeof collaborationVideoUrl === 'string' && collaborationVideoUrl.trim() !== ''
-          ? collaborationVideoUrl.trim()
-          : null,
+        collaborationVideoUrl: resolvedCollaborationVideoUrl,
+        collaborations: this.safeStringify(normalizedCollaborations),
 
         // Other settings - Ensure proper serialization
         paymentAccounts: this.safeStringify(paymentAccounts),
@@ -1664,6 +1672,7 @@ export class AdminService {
                 "instagramUrl" TEXT,
                 "tiktokUrl" TEXT,
                 "collaborationVideoUrl" TEXT,
+                "collaborations" JSONB,
                 "paymentAccounts" JSONB,
                 "faqs" JSONB,
                 "displayPreferences" JSONB,
@@ -1683,6 +1692,9 @@ export class AdminService {
           const displayPreferencesJson = typeof settingsData.displayPreferences === 'string'
             ? settingsData.displayPreferences
             : JSON.stringify(settingsData.displayPreferences || {});
+          const collaborationsJson = typeof settingsData.collaborations === 'string'
+            ? settingsData.collaborations
+            : JSON.stringify(settingsData.collaborations || []);
 
           // Insertar o actualizar usando SQL directo
           await this.prisma.$executeRaw`
@@ -1691,7 +1703,7 @@ export class AdminService {
               "primaryColor", "secondaryColor", "accentColor", "actionColor",
               "whatsapp", "email", "emailFromName", "emailReplyTo", "emailSubject",
               "facebookUrl", "instagramUrl", "tiktokUrl", "collaborationVideoUrl",
-              "paymentAccounts", "faqs", "displayPreferences",
+              "collaborations", "paymentAccounts", "faqs", "displayPreferences",
               "createdAt", "updatedAt"
             ) VALUES (
               'main_settings',
@@ -1712,6 +1724,7 @@ export class AdminService {
               ${settingsData.instagramUrl},
               ${settingsData.tiktokUrl},
               ${settingsData.collaborationVideoUrl},
+              ${collaborationsJson}::jsonb,
               ${paymentAccountsJson}::jsonb,
               ${faqsJson}::jsonb,
               ${displayPreferencesJson}::jsonb,
@@ -1736,6 +1749,7 @@ export class AdminService {
               "instagramUrl" = EXCLUDED."instagramUrl",
               "tiktokUrl" = EXCLUDED."tiktokUrl",
               "collaborationVideoUrl" = EXCLUDED."collaborationVideoUrl",
+              "collaborations" = EXCLUDED."collaborations",
               "paymentAccounts" = EXCLUDED."paymentAccounts",
               "faqs" = EXCLUDED."faqs",
               "displayPreferences" = EXCLUDED."displayPreferences",
@@ -1824,12 +1838,30 @@ export class AdminService {
         tiktokUrl: settings.tiktokUrl || '',
       },
       collaborationVideoUrl: settings.collaborationVideoUrl || '',
+      collaborations: this.normalizeCollaborations(settings),
       paymentAccounts: this.parseJsonField(settings.paymentAccounts),
       faqs: this.parseJsonField(settings.faqs),
       displayPreferences: this.parseJsonField(settings.displayPreferences),
       createdAt: settings.createdAt,
       updatedAt: settings.updatedAt,
     };
+  }
+
+  private normalizeCollaborations(settings: any) {
+    const parsed = this.parseJsonField(settings.collaborations);
+    const normalized = Array.isArray(parsed) ? parsed : [];
+    if (normalized.length > 0) {
+      return normalized;
+    }
+    const fallbackUrl = settings.collaborationVideoUrl;
+    if (typeof fallbackUrl === 'string' && fallbackUrl.trim() !== '') {
+      return [{
+        title: 'Colaboración VIP',
+        description: '',
+        videoUrl: fallbackUrl.trim(),
+      }];
+    }
+    return [];
   }
 
   private parseJsonField(field: any) {

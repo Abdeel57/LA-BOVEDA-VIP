@@ -11,14 +11,14 @@ import { Trophy, Gift, Zap, Target } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useOptimizedAnimations } from '../utils/deviceDetection';
 import { useHomeData } from '../hooks/useHomeData';
-import { Raffle } from '../types';
+import { Raffle, CollaborationEntry } from '../types';
 import { getSettings } from '../services/api';
 
 const HomePage = () => {
     const { raffles, winners, loading, mainRaffle, otherRaffles } = useHomeData();
     const reduceAnimations = useOptimizedAnimations();
     const { appearance, preCalculatedTextColors } = useTheme();
-    const [collaborationVideoUrl, setCollaborationVideoUrl] = useState('');
+    const [collaborationEntries, setCollaborationEntries] = useState<CollaborationEntry[]>([]);
     
     // Obtener colores del tema o usar valores por defecto
     const primaryColor = appearance?.colors?.action || '#0ea5e9';
@@ -61,38 +61,20 @@ const HomePage = () => {
         };
     }, []);
     useEffect(() => {
-        const heroEl = document.querySelector('[data-hero-section="raffle"]') as HTMLElement | null;
-        const collabEl = document.querySelector('[data-collab-section="true"]') as HTMLElement | null;
-        const heroRect = heroEl ? heroEl.getBoundingClientRect() : null;
-        const collabRect = collabEl ? collabEl.getBoundingClientRect() : null;
-
-        // #region agent log
-        fetch('http://127.0.0.1:7242/ingest/aeea22a6-c52e-44b8-9389-1bf744a99e95', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                sessionId: 'debug-session',
-                runId: 'home-layout-check',
-                hypothesisId: 'H4',
-                location: 'HomePage.tsx:33',
-                message: 'hero-collab-layout',
-                data: {
-                    loading,
-                    hasMainRaffle: Boolean(resolvedMainRaffle),
-                    usingDebugRaffle: Boolean(debugMainRaffle),
-                    hasHero: Boolean(heroEl),
-                    hasCollab: Boolean(collabEl),
-                    heroBottom: heroRect ? Math.round(heroRect.bottom) : null,
-                    collabTop: collabRect ? Math.round(collabRect.top) : null,
-                    gap: heroRect && collabRect ? Math.round(collabRect.top - heroRect.bottom) : null,
-                    overlaps: heroRect && collabRect ? collabRect.top < heroRect.bottom : null,
-                    viewport: { width: window.innerWidth, height: window.innerHeight },
-                },
-                timestamp: Date.now(),
-            }),
-        }).catch(() => {});
-        // #endregion
-    }, [loading, resolvedMainRaffle, debugMainRaffle]);
+        let isMounted = true;
+        getSettings()
+            .then((settings) => {
+                if (isMounted) {
+                    setCollaborationEntries(settings.collaborations || []);
+                }
+            })
+            .catch((error) => {
+                console.error('Error loading collaborations settings:', error);
+            });
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     return (
         <PageAnimator>
@@ -208,7 +190,7 @@ const HomePage = () => {
             )}
 
             {/* Collaborations Section */}
-            <CollaborationsSection videoUrl={collaborationVideoUrl} />
+            <CollaborationsSection entries={collaborationEntries} />
 
             {/* Past Winners */}
             {!loading && winners.length > 0 && (

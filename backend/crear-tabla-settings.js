@@ -46,6 +46,7 @@ async function crearTablaSettings() {
         "titleColor" TEXT,
         "subtitleColor" TEXT,
         "descriptionColor" TEXT,
+        "collaborations" JSONB,
         "paymentAccounts" JSONB,
         "faqs" JSONB,
         "displayPreferences" JSONB,

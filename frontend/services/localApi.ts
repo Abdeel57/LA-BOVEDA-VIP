@@ -8,6 +8,7 @@ const HARDCODED_SETTINGS: Settings = {
   paymentAccounts: [],
   faqs: [],
   collaborationVideoUrl: '',
+  collaborations: [],
   createdAt: new Date(),
   updatedAt: new Date(),
 };
